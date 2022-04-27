@@ -18,7 +18,7 @@ const LoginForm = () => {
         })
         .then((res) => {
           localStorage.setItem("token", res.auth.jwt);
-          navigate("/");
+          navigate("/", { replace: true });
         });
     },
   });

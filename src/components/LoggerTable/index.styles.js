@@ -42,3 +42,14 @@ export const Header = styled.div`
   justify-content: space-between;
   padding: 10px 20px;
 `;
+
+export const InputWrapper = styled.span`
+  display: flex;
+  flex-direction: column;
+`;
+
+export const InputLabel = styled.span`
+  color: rgb(255, 212, 59);
+  font-size: 16px;
+  font-weight: bold;
+`;
