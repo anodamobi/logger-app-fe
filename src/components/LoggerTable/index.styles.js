@@ -9,7 +9,6 @@ export const useStyles = createStyles((theme) => ({
     position: "sticky",
     top: 0,
     backgroundColor: theme.colors.dark[7],
-    transition: "box-shadow 150ms ease",
     color: "rgb(193, 194, 197)",
 
     "&::after": {
@@ -21,12 +20,16 @@ export const useStyles = createStyles((theme) => ({
       borderBottom: `1px solid ${theme.colors.dark[3]}`,
     },
   },
+  table: {
+    position: "relative",
+  },
 
   scrolled: {
     boxShadow: theme.shadows.sm,
   },
   body: {
     color: "rgb(193, 194, 197)",
+    overflow: "scroll",
   },
   headerText: {
     color: "rgb(255, 212, 59)",
@@ -38,7 +41,22 @@ export const useStyles = createStyles((theme) => ({
 }));
 
 export const Header = styled.div`
+  z-index: 5;
   display: flex;
   justify-content: space-between;
   padding: 10px 20px;
+  background-color: rgb(26, 27, 30);
+  position: sticky;
+  top: 0;
+`;
+
+export const InputWrapper = styled.span`
+  display: flex;
+  flex-direction: column;
+`;
+
+export const InputLabel = styled.span`
+  color: rgb(255, 212, 59);
+  font-size: 16px;
+  font-weight: bold;
 `;

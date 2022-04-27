@@ -1,22 +1,25 @@
 import React, { useEffect, useState } from "react";
 import { Table, ScrollArea } from "@mantine/core";
 import { useFormik } from "formik";
-import { Header, useStyles } from "./index.styles";
-import { Button, Input } from "../common/common.styles";
+import { Header, InputLabel, InputWrapper, useStyles } from "./index.styles";
+import { Button, DatePicker, Input } from "../common/common.styles";
 import { api } from "../../api";
 import { useParams } from "react-router-dom";
+import "react-datepicker/dist/react-datepicker.css";
+import { format } from "date-fns";
+import InfiniteScroll from "react-infinite-scroll-component";
 
 const LoggerTable = () => {
   const { classes, cx } = useStyles();
-  const [scrolled, setScrolled] = useState(false);
   const { projectName } = useParams();
+  const [scrolled, setScrolled] = useState(false);
   const [logs, setLogs] = useState([]);
+  const [page, setPage] = useState(1);
+  const [limit, setLimit] = useState(25);
 
   const formik = useFormik({
     initialValues: {
-      context: "",
       traceId: "",
-      message: "",
       timestamp: "",
     },
     onSubmit: (values) => {
@@ -46,7 +49,15 @@ const LoggerTable = () => {
       .get(`/logger`, {
         params: {
           project: projectName,
-          traceId: values ? values.traceId : undefined,
+          traceId: values?.traceId ? values.traceId : undefined,
+          dateFrom: values?.timestamp
+            ? format(new Date(values.timestamp), "yyyy-MM-dd'T00:00'")
+            : undefined,
+          dateUntil: values?.timestamp
+            ? format(new Date(values.timestamp), "yyyy-MM-dd'T23:59'")
+            : undefined,
+          page: page,
+          limit: limit,
         },
       })
       .catch(() => {
@@ -54,6 +65,28 @@ const LoggerTable = () => {
       })
       .then((r) => {
         setLogs(r.data);
+      });
+  };
+
+  const loadMore = (values) => {
+    return api
+      .get(`/logger`, {
+        params: {
+          project: projectName,
+          traceId: values?.traceId ? values.traceId : undefined,
+          dateFrom: values?.timestamp
+            ? format(new Date(values.timestamp), "yyyy-MM-dd'T00:00'")
+            : undefined,
+          dateUntil: values?.timestamp
+            ? format(new Date(values.timestamp), "yyyy-MM-dd'T23:59'")
+            : undefined,
+          page: page,
+          limit: limit,
+        },
+      })
+      .then((r) => {
+        setLogs([...logs, ...r.data]);
+        setPage(page + 1);
       });
   };
 
@@ -67,54 +100,54 @@ const LoggerTable = () => {
         <Button type="button" onClick={() => getLogs()}>
           Reset logs
         </Button>
+        <InputWrapper>
+          <InputLabel>Trace Id</InputLabel>
+          <Input
+            placeholder="traceId"
+            id="traceId"
+            value={formik.values.traceId}
+            onChange={formik.handleChange}
+          />
+        </InputWrapper>
+        <InputWrapper>
+          <InputLabel>Timestamp</InputLabel>
+          <DatePicker
+            selected={
+              (formik.values.timestamp && new Date(formik.values.timestamp)) ||
+              null
+            }
+            onChange={(val) => formik.setFieldValue("timestamp", val)}
+          />
+        </InputWrapper>
         <Button type="submit">Apply filters</Button>
       </Header>
-      <ScrollArea
-        sx={{ height: "calc(100vh - 55px)" }}
-        onScrollPositionChange={({ y }) => setScrolled(y !== 0)}
+      <InfiniteScroll
+        dataLength={logs.length}
+        next={() => loadMore(formik.values)}
+        hasMore={true}
       >
-        <Table sx={{ minWidth: 700 }}>
+        <Table className={cx(classes.table)} sx={{ minWidth: 700 }}>
           <thead
             className={cx(classes.header, { [classes.scrolled]: scrolled })}
           >
             <tr>
               <th>
                 <span className={cx(classes.headerText)}>Context</span>
-                <Input
-                  id="context"
-                  value={formik.values.context}
-                  onChange={formik.handleChange}
-                />
               </th>
               <th>
                 <span className={cx(classes.headerText)}>Trace Id</span>
-                <Input
-                  id="traceId"
-                  value={formik.values.traceId}
-                  onChange={formik.handleChange}
-                />
               </th>
               <th>
                 <span className={cx(classes.headerText)}>Message</span>
-                <Input
-                  id="message"
-                  value={formik.values.message}
-                  onChange={formik.handleChange}
-                />
               </th>
               <th>
                 <span className={cx(classes.headerText)}>Timestamp</span>
-                <Input
-                  id="timestamp"
-                  value={formik.values.timestamp}
-                  onChange={formik.handleChange}
-                />
               </th>
             </tr>
           </thead>
           <tbody className={cx(classes.body)}>{rows}</tbody>
         </Table>
-      </ScrollArea>
+      </InfiniteScroll>
     </form>
   );
 };
