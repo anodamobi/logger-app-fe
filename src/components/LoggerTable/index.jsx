@@ -7,12 +7,15 @@ import { api } from "../../api";
 import { useParams } from "react-router-dom";
 import "react-datepicker/dist/react-datepicker.css";
 import { format } from "date-fns";
+import InfiniteScroll from "react-infinite-scroll-component";
 
 const LoggerTable = () => {
   const { classes, cx } = useStyles();
-  const [scrolled, setScrolled] = useState(false);
   const { projectName } = useParams();
+  const [scrolled, setScrolled] = useState(false);
   const [logs, setLogs] = useState([]);
+  const [page, setPage] = useState(1);
+  const [limit, setLimit] = useState(25);
 
   const formik = useFormik({
     initialValues: {
@@ -53,6 +56,8 @@ const LoggerTable = () => {
           dateUntil: values?.timestamp
             ? format(new Date(values.timestamp), "yyyy-MM-dd'T23:59'")
             : undefined,
+          page: page,
+          limit: limit,
         },
       })
       .catch(() => {
@@ -60,6 +65,28 @@ const LoggerTable = () => {
       })
       .then((r) => {
         setLogs(r.data);
+      });
+  };
+
+  const loadMore = (values) => {
+    return api
+      .get(`/logger`, {
+        params: {
+          project: projectName,
+          traceId: values?.traceId ? values.traceId : undefined,
+          dateFrom: values?.timestamp
+            ? format(new Date(values.timestamp), "yyyy-MM-dd'T00:00'")
+            : undefined,
+          dateUntil: values?.timestamp
+            ? format(new Date(values.timestamp), "yyyy-MM-dd'T23:59'")
+            : undefined,
+          page: page,
+          limit: limit,
+        },
+      })
+      .then((r) => {
+        setLogs([...logs, ...r.data]);
+        setPage(page + 1);
       });
   };
 
@@ -94,11 +121,12 @@ const LoggerTable = () => {
         </InputWrapper>
         <Button type="submit">Apply filters</Button>
       </Header>
-      <ScrollArea
-        sx={{ height: "calc(100vh - 55px)" }}
-        onScrollPositionChange={({ y }) => setScrolled(y !== 0)}
+      <InfiniteScroll
+        dataLength={logs.length}
+        next={() => loadMore(formik.values)}
+        hasMore={true}
       >
-        <Table sx={{ minWidth: 700 }}>
+        <Table className={cx(classes.table)} sx={{ minWidth: 700 }}>
           <thead
             className={cx(classes.header, { [classes.scrolled]: scrolled })}
           >
@@ -119,7 +147,7 @@ const LoggerTable = () => {
           </thead>
           <tbody className={cx(classes.body)}>{rows}</tbody>
         </Table>
-      </ScrollArea>
+      </InfiniteScroll>
     </form>
   );
 };
