@@ -39,7 +39,13 @@ const LoggerTable = () => {
         <span className={cx(classes.rowText)}>{row.message}</span>
       </td>
       <td>
-        <span className={cx(classes.rowText)}>{row.timestamp}</span>
+        <span className={cx(classes.rowText)}>
+          {new Date(new Date(row.timestamp).toUTCString()).getDate() +
+            "-" +
+            (new Date(new Date(row.timestamp).toUTCString()).getMonth() + 1) +
+            "-" +
+            new Date(new Date(row.timestamp).toUTCString()).getFullYear()}
+        </span>
       </td>
     </tr>
   ));
