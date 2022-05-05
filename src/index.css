@@ -6,8 +6,7 @@ body,
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: rgb(26, 27, 30);
-  color: rgb(193, 194, 197);
+  color: black;
   min-height: 100vh;
   height: auto;
   margin: 0;
