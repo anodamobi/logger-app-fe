@@ -112,7 +112,13 @@ const LoggerTable = () => {
   return (
     <form onSubmit={formik.handleSubmit} className={cx(classes.form)}>
       <Header>
-        <Button type="button" onClick={() => getLogs()}>
+        <Button
+          type="reset"
+          onClick={() => {
+            getLogs();
+            formik.resetForm();
+          }}
+        >
           Reset logs
         </Button>
         <Button type="submit">Apply filters</Button>
