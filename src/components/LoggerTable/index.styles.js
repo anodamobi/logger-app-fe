@@ -9,6 +9,7 @@ export const useStyles = createStyles((theme) => ({
     position: "sticky",
     top: 0,
     color: "rgb(193, 194, 197)",
+    borderBottom: "1px solid rgb(34,139,230)",
 
     "&::after": {
       content: '""',
@@ -57,4 +58,9 @@ export const InputLabel = styled.span`
   color: rgb(34, 139, 230);
   font-size: 16px;
   font-weight: bold;
+`;
+
+export const NoData = styled.div`
+  display: flex;
+  justify-content: center;
 `;

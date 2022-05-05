@@ -14,14 +14,18 @@ export const Button = styled.button`
 
 export const Input = styled.input`
   border: 1px solid rgb(34, 139, 230);
-  color: rgb(193, 194, 197);
-  padding: 5px 2px;
+  color: black;
+  padding: 15px 2px;
   border-radius: 5px;
   background-color: inherit;
   font-size: 16px;
   cursor: pointer;
   max-height: 20px;
   align-items: center;
+
+  &:focus {
+    outline: none;
+  }
 `;
 
 export const DatePicker = styled(Picker)`

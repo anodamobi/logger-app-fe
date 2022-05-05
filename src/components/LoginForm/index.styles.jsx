@@ -21,7 +21,8 @@ export const Input = styled.input`
 export const SubmitButton = styled.button`
   background-color: inherit;
   border: thin solid rgb(34, 139, 230);
-  color: rgb(34, 139, 230);
+  background-color: rgb(34, 139, 230);
+  color: white;
   font-size: 22px;
   border-radius: 5px;
   font-weight: bold;

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Table, ScrollArea } from "@mantine/core";
 import { useFormik } from "formik";
-import { Header, InputLabel, InputWrapper, useStyles } from "./index.styles";
+import { Header, InputWrapper, useStyles } from "./index.styles";
 import { Button, Input } from "../common/common.styles";
 import { api } from "../../api";
 import { useParams } from "react-router-dom";
@@ -135,6 +135,7 @@ const LoggerTable = () => {
                     id="context"
                     value={formik.values.context}
                     onChange={formik.handleChange}
+                    autocomplete="off"
                   />
                 </InputWrapper>
               </th>
@@ -146,6 +147,7 @@ const LoggerTable = () => {
                     id="traceId"
                     value={formik.values.traceId}
                     onChange={formik.handleChange}
+                    autocomplete="off"
                   />
                 </InputWrapper>
               </th>
@@ -157,6 +159,7 @@ const LoggerTable = () => {
                     id="context"
                     value={formik.values.context}
                     onChange={formik.handleChange}
+                    autocomplete="off"
                   />
                 </InputWrapper>
               </th>
@@ -173,8 +176,6 @@ const LoggerTable = () => {
                         start: start._d,
                         untilDate: end._d,
                       });
-
-                      console.log({ start: start._d, untilDate: end._d });
                     }}
                   />
                 </Space>
