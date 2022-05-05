@@ -21,6 +21,7 @@ const LoggerTable = () => {
     initialValues: {
       traceId: "",
       timestamp: "",
+      context: "",
     },
     onSubmit: (values) => {
       getLogs(values);
@@ -56,6 +57,7 @@ const LoggerTable = () => {
         params: {
           project: projectName,
           env: env,
+          context: values?.context,
           traceId: values?.traceId ? values.traceId : undefined,
           dateFrom: values?.timestamp
             ? format(new Date(values.timestamp), "yyyy-MM-dd'T00:00'")
@@ -81,6 +83,7 @@ const LoggerTable = () => {
         params: {
           project: projectName,
           traceId: values?.traceId ? values.traceId : undefined,
+          context: values?.context,
           dateFrom: values?.timestamp
             ? format(new Date(values.timestamp), "yyyy-MM-dd'T00:00'")
             : undefined,
@@ -107,25 +110,6 @@ const LoggerTable = () => {
         <Button type="button" onClick={() => getLogs()}>
           Reset logs
         </Button>
-        <InputWrapper>
-          <InputLabel>Trace Id</InputLabel>
-          <Input
-            placeholder="traceId"
-            id="traceId"
-            value={formik.values.traceId}
-            onChange={formik.handleChange}
-          />
-        </InputWrapper>
-        <InputWrapper>
-          <InputLabel>Timestamp</InputLabel>
-          <DatePicker
-            selected={
-              (formik.values.timestamp && new Date(formik.values.timestamp)) ||
-              null
-            }
-            onChange={(val) => formik.setFieldValue("timestamp", val)}
-          />
-        </InputWrapper>
         <Button type="submit">Apply filters</Button>
       </Header>
       <InfiniteScroll
@@ -139,16 +123,48 @@ const LoggerTable = () => {
           >
             <tr>
               <th>
-                <span className={cx(classes.headerText)}>Context</span>
+                <InputWrapper>
+                  <span className={cx(classes.headerText)}>Context</span>
+                  <Input
+                    placeholder="Context"
+                    id="context"
+                    value={formik.values.context}
+                    onChange={formik.handleChange}
+                  />
+                </InputWrapper>
               </th>
               <th>
-                <span className={cx(classes.headerText)}>Trace Id</span>
+                <InputWrapper>
+                  <span className={cx(classes.headerText)}>Trace Id</span>
+                  <Input
+                    placeholder="traceId"
+                    id="traceId"
+                    value={formik.values.traceId}
+                    onChange={formik.handleChange}
+                  />
+                </InputWrapper>
               </th>
               <th>
                 <span className={cx(classes.headerText)}>Message</span>
+                <InputWrapper style={{ visibility: "hidden" }}>
+                  <Input
+                    placeholder="Context"
+                    id="context"
+                    value={formik.values.context}
+                    onChange={formik.handleChange}
+                  />
+                </InputWrapper>
               </th>
               <th>
                 <span className={cx(classes.headerText)}>Timestamp</span>
+                <DatePicker
+                  selected={
+                    (formik.values.timestamp &&
+                      new Date(formik.values.timestamp)) ||
+                    null
+                  }
+                  onChange={(val) => formik.setFieldValue("timestamp", val)}
+                />
               </th>
             </tr>
           </thead>
