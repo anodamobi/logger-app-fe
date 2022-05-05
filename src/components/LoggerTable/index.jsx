@@ -2,12 +2,13 @@ import React, { useEffect, useState } from "react";
 import { Table, ScrollArea } from "@mantine/core";
 import { useFormik } from "formik";
 import { Header, InputLabel, InputWrapper, useStyles } from "./index.styles";
-import { Button, DatePicker, Input } from "../common/common.styles";
+import { Button, Input } from "../common/common.styles";
 import { api } from "../../api";
 import { useParams } from "react-router-dom";
 import "react-datepicker/dist/react-datepicker.css";
 import { format } from "date-fns";
 import InfiniteScroll from "react-infinite-scroll-component";
+import { DatePicker, Space } from "antd";
 
 const LoggerTable = () => {
   const { classes, cx } = useStyles();
@@ -17,10 +18,12 @@ const LoggerTable = () => {
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(25);
 
+  const { RangePicker } = DatePicker;
+
   const formik = useFormik({
     initialValues: {
       traceId: "",
-      timestamp: "",
+      timestamp: { start: "", untilDate: "" },
       context: "",
     },
     onSubmit: (values) => {
@@ -55,11 +58,14 @@ const LoggerTable = () => {
           env: env,
           context: values?.context,
           traceId: values?.traceId ? values.traceId : undefined,
-          dateFrom: values?.timestamp
-            ? format(new Date(values.timestamp), "yyyy-MM-dd'T00:00'")
+          dateFrom: values?.timestamp.start
+            ? format(new Date(values?.timestamp.start), "yyyy-MM-dd'T'hh:mm")
             : undefined,
-          dateUntil: values?.timestamp
-            ? format(new Date(values.timestamp), "yyyy-MM-dd'T23:59'")
+          dateUntil: values?.timestamp.untilDate
+            ? format(
+                new Date(values?.timestamp.untilDate),
+                "yyyy-MM-dd'T'hh:mm"
+              )
             : undefined,
           page: page,
           limit: limit,
@@ -80,11 +86,14 @@ const LoggerTable = () => {
           project: projectName,
           traceId: values?.traceId ? values.traceId : undefined,
           context: values?.context,
-          dateFrom: values?.timestamp
-            ? format(new Date(values.timestamp), "yyyy-MM-dd'T00:00'")
+          dateFrom: values?.timestamp.start
+            ? format(new Date(values?.timestamp.start), "yyyy-MM-dd'T'hh:mm")
             : undefined,
-          dateUntil: values?.timestamp
-            ? format(new Date(values.timestamp), "yyyy-MM-dd'T23:59'")
+          dateUntil: values?.timestamp.untilDate
+            ? format(
+                new Date(values?.timestamp.untilDate),
+                "yyyy-MM-dd'T'hh:mm"
+              )
             : undefined,
           page: page,
           limit: limit,
@@ -153,14 +162,22 @@ const LoggerTable = () => {
               </th>
               <th>
                 <span className={cx(classes.headerText)}>Timestamp</span>
-                <DatePicker
-                  selected={
-                    (formik.values.timestamp &&
-                      new Date(formik.values.timestamp)) ||
-                    null
-                  }
-                  onChange={(val) => formik.setFieldValue("timestamp", val)}
-                />
+                <Space>
+                  <RangePicker
+                    showTime={{ format: "HH:mm" }}
+                    format="YYYY-MM-DD HH:mm"
+                    onChange={(val) => {
+                      if (!val) return;
+                      const [start, end] = val;
+                      formik.setFieldValue("timestamp", {
+                        start: start._d,
+                        untilDate: end._d,
+                      });
+
+                      console.log({ start: start._d, untilDate: end._d });
+                    }}
+                  />
+                </Space>
               </th>
             </tr>
           </thead>
