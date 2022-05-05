@@ -56,11 +56,11 @@ const ProjectTable = () => {
     </tr>
   ));
 
-  if (!projects.length) {
+  useEffect(() => {
     api.get("/logger/projects").then((res) => {
       setProjects(res.projects);
     });
-  }
+  }, []);
 
   return (
     <ScrollArea
