@@ -11,7 +11,7 @@ import InfiniteScroll from "react-infinite-scroll-component";
 
 const LoggerTable = () => {
   const { classes, cx } = useStyles();
-  const { projectName } = useParams();
+  const { projectName, env } = useParams();
   const [scrolled, setScrolled] = useState(false);
   const [logs, setLogs] = useState([]);
   const [page, setPage] = useState(1);
@@ -49,6 +49,7 @@ const LoggerTable = () => {
       .get(`/logger`, {
         params: {
           project: projectName,
+          env: env,
           traceId: values?.traceId ? values.traceId : undefined,
           dateFrom: values?.timestamp
             ? format(new Date(values.timestamp), "yyyy-MM-dd'T00:00'")
@@ -68,7 +69,7 @@ const LoggerTable = () => {
       });
   };
 
-  const loadMore = (values) => {
+  const loadMore = async (values) => {
     return api
       .get(`/logger`, {
         params: {
