@@ -10,7 +10,7 @@ export const Wrapper = styled.div`
 `;
 
 export const Title = styled.span`
-  color: rgb(255, 212, 59);
+  color: rgb(34, 139, 230);
   font-weight: bold;
   font-size: 65px;
   margin-bottom: 60px;

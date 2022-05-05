@@ -7,9 +7,8 @@ const useStyles = createStyles((theme) => ({
   header: {
     position: "sticky",
     top: 0,
-    backgroundColor: theme.colors.dark[7],
     transition: "box-shadow 150ms ease",
-    color: "rgb(193, 194, 197)",
+    color: "black",
 
     "&::after": {
       content: '""',
@@ -17,7 +16,7 @@ const useStyles = createStyles((theme) => ({
       left: 0,
       right: 0,
       bottom: 0,
-      borderBottom: `1px solid ${theme.colors.dark[3]}`,
+      borderBottom: `1px solid rgb(34, 139, 230)`,
     },
   },
 
@@ -25,13 +24,13 @@ const useStyles = createStyles((theme) => ({
     boxShadow: theme.shadows.sm,
   },
   body: {
-    color: "rgb(193, 194, 197)",
+    color: "black",
   },
   row: {
     cursor: "pointer",
   },
   headerText: {
-    color: "rgb(255, 212, 59)",
+    color: "rgb(34, 139, 230)",
     fontSize: 18,
   },
   rowText: {
