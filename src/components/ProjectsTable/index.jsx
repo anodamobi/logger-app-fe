@@ -16,7 +16,7 @@ const useStyles = createStyles((theme) => ({
       left: 0,
       right: 0,
       bottom: 0,
-      borderBottom: `1px solid rgb(34, 139, 230)`,
+      borderBottom: `1px solid #ff7145`,
     },
   },
 
@@ -30,7 +30,7 @@ const useStyles = createStyles((theme) => ({
     cursor: "pointer",
   },
   headerText: {
-    color: "rgb(34, 139, 230)",
+    color: "#ff7145",
     fontSize: 18,
   },
   rowText: {

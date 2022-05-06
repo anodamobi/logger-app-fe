@@ -2,8 +2,8 @@ import styled from "styled-components";
 import Picker from "react-datepicker";
 
 export const Button = styled.button`
-  border: 1px solid rgb(34, 139, 230);
-  color: rgb(34, 139, 230);
+  border: 1px solid #ff7145;
+  color: #ff7145;
   padding: 10px;
   border-radius: 5px;
   background-color: inherit;
@@ -13,7 +13,7 @@ export const Button = styled.button`
 `;
 
 export const Input = styled.input`
-  border: 1px solid rgb(34, 139, 230);
+  border: 1px solid #ff7145;
   color: black;
   padding: 15px 2px;
   border-radius: 5px;
@@ -29,7 +29,7 @@ export const Input = styled.input`
 `;
 
 export const DatePicker = styled(Picker)`
-  border: 1px solid rgb(34, 139, 230);
+  border: 1px solid #ff7145;
   color: rgb(193, 194, 197);
   padding: 5px 2px;
   border-radius: 5px;
