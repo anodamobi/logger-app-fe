@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { createStyles, Table, ScrollArea } from "@mantine/core";
-import { useNavigate } from "react-router-dom";
-import { api } from "../../api";
+import { useNavigate, useParams } from "react-router-dom";
 
 const useStyles = createStyles((theme) => ({
   header: {
@@ -38,16 +37,18 @@ const useStyles = createStyles((theme) => ({
   },
 }));
 
-const ProjectTable = () => {
+const EnvTable = () => {
   const { classes, cx } = useStyles();
   const navigate = useNavigate();
   const [scrolled, setScrolled] = useState(false);
-  const [projects, setProjects] = useState([]);
+  const { projectName } = useParams();
 
-  const rows = projects.map((row) => (
+  const environments = ["dev", "stage", "prod"];
+
+  const rows = environments.map((row) => (
     <tr
       className={cx(classes.row)}
-      onClick={() => navigate(`/projects/${row}`)}
+      onClick={() => navigate(`/projects/${projectName}/${row}`)}
       key={row}
     >
       <td>
@@ -55,12 +56,6 @@ const ProjectTable = () => {
       </td>
     </tr>
   ));
-
-  useEffect(() => {
-    api.get("/logger/projects").then((res) => {
-      setProjects(res.projects);
-    });
-  }, []);
 
   return (
     <ScrollArea
@@ -71,7 +66,7 @@ const ProjectTable = () => {
         <thead className={cx(classes.header, { [classes.scrolled]: scrolled })}>
           <tr>
             <th>
-              <span className={cx(classes.headerText)}>Project Name</span>
+              <span className={cx(classes.headerText)}>Environment</span>
             </th>
           </tr>
         </thead>
@@ -81,4 +76,4 @@ const ProjectTable = () => {
   );
 };
 
-export default ProjectTable;
+export default EnvTable;
