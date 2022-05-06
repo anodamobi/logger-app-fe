@@ -181,21 +181,23 @@ const LoggerTable = () => {
                   </InputWrapper>
                 </th>
                 <th>
-                  <span className={cx(classes.headerText)}>Timestamp</span>
-                  <Space>
-                    <RangePicker
-                      showTime={{ format: "HH:mm" }}
-                      format="YYYY-MM-DD HH:mm"
-                      onChange={(val) => {
-                        if (!val) return;
-                        const [start, end] = val;
-                        formik.setFieldValue("timestamp", {
-                          start: start._d,
-                          untilDate: end._d,
-                        });
-                      }}
-                    />
-                  </Space>
+                  <InputWrapper>
+                    <span className={cx(classes.headerText)}>Timestamp</span>
+                    <Space>
+                      <RangePicker
+                        showTime={{ format: "HH:mm" }}
+                        format="YYYY-MM-DD HH:mm"
+                        onChange={(val) => {
+                          if (!val) return;
+                          const [start, end] = val;
+                          formik.setFieldValue("timestamp", {
+                            start: start._d,
+                            untilDate: end._d,
+                          });
+                        }}
+                      />
+                    </Space>
+                  </InputWrapper>
                 </th>
               </tr>
             </thead>

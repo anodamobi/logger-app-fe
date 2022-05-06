@@ -7,7 +7,7 @@ export const Wrapper = styled.form`
 `;
 
 export const Input = styled.input`
-  border: thin solid rgb(34, 139, 230);
+  border: thin solid #ff7145;
   background: inherit;
   border-radius: 5px;
   padding: 10px;
@@ -20,8 +20,8 @@ export const Input = styled.input`
 
 export const SubmitButton = styled.button`
   background-color: inherit;
-  border: thin solid rgb(34, 139, 230);
-  background-color: rgb(34, 139, 230);
+  border: thin solid #ff7145;
+  background-color: #ff7145;
   color: white;
   font-size: 22px;
   border-radius: 5px;
