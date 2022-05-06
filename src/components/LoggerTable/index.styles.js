@@ -38,6 +38,9 @@ export const useStyles = createStyles((theme) => ({
   rowText: {
     fontSize: 16,
   },
+  row: {
+    cursor: "pointer",
+  },
 }));
 
 export const Header = styled.div`

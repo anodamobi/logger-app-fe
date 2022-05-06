@@ -9,6 +9,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import { format } from "date-fns";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { DatePicker, Space } from "antd";
+import LogsModal from "../../modals/LogsModal";
 
 const LoggerTable = () => {
   const { classes, cx } = useStyles();
@@ -17,6 +18,8 @@ const LoggerTable = () => {
   const [logs, setLogs] = useState([]);
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(25);
+  const [isModalOpen, setModalOpen] = useState(false);
+  const [modalData, setModalData] = useState({});
 
   const { RangePicker } = DatePicker;
 
@@ -32,7 +35,14 @@ const LoggerTable = () => {
   });
 
   const rows = logs.map((row) => (
-    <tr className={cx(classes.row)} key={row}>
+    <tr
+      className={cx(classes.row)}
+      key={row}
+      onClick={() => {
+        setModalOpen(true);
+        setModalData(row);
+      }}
+    >
       <td>
         <span className={cx(classes.rowText)}>{row.context}</span>
       </td>
@@ -110,88 +120,95 @@ const LoggerTable = () => {
   }, []);
 
   return (
-    <form onSubmit={formik.handleSubmit} className={cx(classes.form)}>
-      <Header>
-        <Button
-          type="reset"
-          onClick={() => {
-            getLogs();
-            formik.resetForm();
-          }}
-        >
-          Reset logs
-        </Button>
-        <Button type="submit">Apply filters</Button>
-      </Header>
-      <InfiniteScroll
-        dataLength={logs.length}
-        next={() => loadMore(formik.values)}
-        hasMore={true}
-      >
-        <Table className={cx(classes.table)} sx={{ minWidth: 700 }}>
-          <thead
-            className={cx(classes.header, { [classes.scrolled]: scrolled })}
+    <>
+      <form onSubmit={formik.handleSubmit} className={cx(classes.form)}>
+        <Header>
+          <Button
+            type="reset"
+            onClick={() => {
+              getLogs();
+              formik.resetForm();
+            }}
           >
-            <tr>
-              <th>
-                <InputWrapper>
-                  <span className={cx(classes.headerText)}>Context</span>
-                  <Input
-                    placeholder="Context"
-                    id="context"
-                    value={formik.values.context}
-                    onChange={formik.handleChange}
-                    autocomplete="off"
-                  />
-                </InputWrapper>
-              </th>
-              <th>
-                <InputWrapper>
-                  <span className={cx(classes.headerText)}>Trace Id</span>
-                  <Input
-                    placeholder="traceId"
-                    id="traceId"
-                    value={formik.values.traceId}
-                    onChange={formik.handleChange}
-                    autocomplete="off"
-                  />
-                </InputWrapper>
-              </th>
-              <th>
-                <span className={cx(classes.headerText)}>Message</span>
-                <InputWrapper style={{ visibility: "hidden" }}>
-                  <Input
-                    placeholder="Context"
-                    id="context"
-                    value={formik.values.context}
-                    onChange={formik.handleChange}
-                    autocomplete="off"
-                  />
-                </InputWrapper>
-              </th>
-              <th>
-                <span className={cx(classes.headerText)}>Timestamp</span>
-                <Space>
-                  <RangePicker
-                    showTime={{ format: "HH:mm" }}
-                    format="YYYY-MM-DD HH:mm"
-                    onChange={(val) => {
-                      if (!val) return;
-                      const [start, end] = val;
-                      formik.setFieldValue("timestamp", {
-                        start: start._d,
-                        untilDate: end._d,
-                      });
-                    }}
-                  />
-                </Space>
-              </th>
-            </tr>
-          </thead>
-          <tbody className={cx(classes.body)}>{rows}</tbody>
-        </Table>
-      </InfiniteScroll>
-    </form>
+            Reset logs
+          </Button>
+          <Button type="submit">Apply filters</Button>
+        </Header>
+        <InfiniteScroll
+          dataLength={logs.length}
+          next={() => loadMore(formik.values)}
+          hasMore={true}
+        >
+          <Table className={cx(classes.table)} sx={{ minWidth: 700 }}>
+            <thead
+              className={cx(classes.header, { [classes.scrolled]: scrolled })}
+            >
+              <tr>
+                <th>
+                  <InputWrapper>
+                    <span className={cx(classes.headerText)}>Context</span>
+                    <Input
+                      placeholder="Context"
+                      id="context"
+                      value={formik.values.context}
+                      onChange={formik.handleChange}
+                      autocomplete="off"
+                    />
+                  </InputWrapper>
+                </th>
+                <th>
+                  <InputWrapper>
+                    <span className={cx(classes.headerText)}>Trace Id</span>
+                    <Input
+                      placeholder="traceId"
+                      id="traceId"
+                      value={formik.values.traceId}
+                      onChange={formik.handleChange}
+                      autocomplete="off"
+                    />
+                  </InputWrapper>
+                </th>
+                <th>
+                  <span className={cx(classes.headerText)}>Message</span>
+                  <InputWrapper style={{ visibility: "hidden" }}>
+                    <Input
+                      placeholder="Context"
+                      id="context"
+                      value={formik.values.context}
+                      onChange={formik.handleChange}
+                      autocomplete="off"
+                    />
+                  </InputWrapper>
+                </th>
+                <th>
+                  <span className={cx(classes.headerText)}>Timestamp</span>
+                  <Space>
+                    <RangePicker
+                      showTime={{ format: "HH:mm" }}
+                      format="YYYY-MM-DD HH:mm"
+                      onChange={(val) => {
+                        if (!val) return;
+                        const [start, end] = val;
+                        formik.setFieldValue("timestamp", {
+                          start: start._d,
+                          untilDate: end._d,
+                        });
+                      }}
+                    />
+                  </Space>
+                </th>
+              </tr>
+            </thead>
+            <tbody className={cx(classes.body)}>{rows}</tbody>
+          </Table>
+        </InfiniteScroll>
+      </form>
+      <LogsModal
+        isOpen={isModalOpen}
+        onClose={() => setModalOpen(false)}
+        data={modalData}
+      />
+    </>
   );
 };
 
