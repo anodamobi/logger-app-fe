@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { Table, ScrollArea } from "@mantine/core";
+import { Table, UnstyledButton, Group, Text, Center } from "@mantine/core";
+import { Selector, ChevronDown, ChevronUp } from "tabler-icons-react";
 import { useFormik } from "formik";
 import { Header, InputWrapper, useStyles } from "./index.styles";
 import { Button, Input } from "../common/common.styles";
@@ -14,12 +15,11 @@ import LogsModal from "../../modals/LogsModal";
 const LoggerTable = () => {
   const { classes, cx } = useStyles();
   const { projectName, env } = useParams();
-  const [scrolled, setScrolled] = useState(false);
   const [logs, setLogs] = useState([]);
   const [page, setPage] = useState(1);
-  const [limit, setLimit] = useState(25);
   const [isModalOpen, setModalOpen] = useState(false);
   const [modalData, setModalData] = useState({});
+  const [sorting, setSorting] = useState(1);
 
   const { RangePicker } = DatePicker;
 
@@ -27,12 +27,31 @@ const LoggerTable = () => {
     initialValues: {
       traceId: "",
       timestamp: { start: "", untilDate: "" },
-      context: "",
+      context: ""
     },
     onSubmit: (values) => {
       getLogs(values);
-    },
+    }
   });
+
+  function Th({ children, reversed, sorted, onSort }) {
+    const { classes } = useStyles();
+    const Icon = sorted ? (reversed ? ChevronUp : ChevronDown) : Selector;
+    return (
+      <th className={classes.th}>
+        <UnstyledButton onClick={onSort} className={classes.control}>
+          <Group position="apart">
+            <Text weight={500} size="sm">
+              {children}
+            </Text>
+            <Center className={classes.icon}>
+              <Icon size={14} />
+            </Center>
+          </Group>
+        </UnstyledButton>
+      </th>
+    );
+  }
 
   const rows = logs.map((row) => (
     <tr
@@ -41,21 +60,18 @@ const LoggerTable = () => {
       onClick={() => {
         setModalOpen(true);
         setModalData(row);
-      }}
-    >
+      }}>
       <td>
         <span className={cx(classes.rowText)}>{row.context}</span>
       </td>
       <td>
         <span className={cx(classes.rowText)}>{row.traceId}</span>
       </td>
-      <td>
+      <td title={row.message} className={cx(classes.messageCol)}>
         <span className={cx(classes.rowText)}>{row.message}</span>
       </td>
       <td>
-        <span className={cx(classes.rowText)}>
-          {new Date(row.timestamp).toUTCString()}
-        </span>
+        <span className={cx(classes.rowText)}>{row.timestamp}</span>
       </td>
     </tr>
   ));
@@ -72,14 +88,10 @@ const LoggerTable = () => {
             ? format(new Date(values?.timestamp.start), "yyyy-MM-dd'T'hh:mm")
             : undefined,
           dateUntil: values?.timestamp.untilDate
-            ? format(
-                new Date(values?.timestamp.untilDate),
-                "yyyy-MM-dd'T'hh:mm"
-              )
+            ? format(new Date(values?.timestamp.untilDate), "yyyy-MM-dd'T'hh:mm")
             : undefined,
-          page: page,
-          limit: limit,
-        },
+          order: sorting
+        }
       })
       .catch(() => {
         setLogs([]);
@@ -100,14 +112,12 @@ const LoggerTable = () => {
             ? format(new Date(values?.timestamp.start), "yyyy-MM-dd'T'hh:mm")
             : undefined,
           dateUntil: values?.timestamp.untilDate
-            ? format(
-                new Date(values?.timestamp.untilDate),
-                "yyyy-MM-dd'T'hh:mm"
-              )
+            ? format(new Date(values?.timestamp.untilDate), "yyyy-MM-dd'T'hh:mm")
             : undefined,
           page: page,
-          limit: limit,
-        },
+          limit: 25,
+          order: sorting
+        }
       })
       .then((r) => {
         setLogs([...logs, ...r.data]);
@@ -128,8 +138,7 @@ const LoggerTable = () => {
             onClick={() => {
               getLogs();
               formik.resetForm();
-            }}
-          >
+            }}>
             Reset logs
           </Button>
           <Button type="submit">Apply filters</Button>
@@ -137,12 +146,9 @@ const LoggerTable = () => {
         <InfiniteScroll
           dataLength={logs.length}
           next={() => loadMore(formik.values)}
-          hasMore={true}
-        >
+          hasMore={true}>
           <Table className={cx(classes.table)} sx={{ minWidth: 700 }}>
-            <thead
-              className={cx(classes.header, { [classes.scrolled]: scrolled })}
-            >
+            <thead className={cx(classes.header)}>
               <tr>
                 <th>
                   <InputWrapper>
@@ -180,7 +186,12 @@ const LoggerTable = () => {
                     />
                   </InputWrapper>
                 </th>
-                <th>
+                <Th
+                  onSort={() => {
+                    setSorting(sorting === 1 ? -1 : 1);
+                    setLogs([]);
+                    getLogs();
+                  }}>
                   <InputWrapper>
                     <span className={cx(classes.headerText)}>Timestamp</span>
                     <Space>
@@ -192,24 +203,20 @@ const LoggerTable = () => {
                           const [start, end] = val;
                           formik.setFieldValue("timestamp", {
                             start: start._d,
-                            untilDate: end._d,
+                            untilDate: end._d
                           });
                         }}
                       />
                     </Space>
                   </InputWrapper>
-                </th>
+                </Th>
               </tr>
             </thead>
             <tbody className={cx(classes.body)}>{rows}</tbody>
           </Table>
         </InfiniteScroll>
       </form>
-      <LogsModal
-        isOpen={isModalOpen}
-        onClose={() => setModalOpen(false)}
-        data={modalData}
-      />
+      <LogsModal isOpen={isModalOpen} onClose={() => setModalOpen(false)} data={modalData} />
     </>
   );
 };
