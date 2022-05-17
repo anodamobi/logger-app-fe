@@ -34,21 +34,22 @@ const LoggerTable = () => {
     }
   });
 
-  function Th({ children, reversed, sorted, onSort }) {
+  function Th({ children, reversed, sorted, onSort, text }) {
     const { classes } = useStyles();
     const Icon = sorted ? (reversed ? ChevronUp : ChevronDown) : Selector;
     return (
       <th className={classes.th}>
         <UnstyledButton onClick={onSort} className={classes.control}>
           <Group position="apart">
-            <Text weight={500} size="sm">
-              {children}
+            <Text className={cx(classes.headerText)} weight={700} size="sm">
+              {text}
             </Text>
             <Center className={classes.icon}>
               <Icon size={14} />
             </Center>
           </Group>
         </UnstyledButton>
+        {children}
       </th>
     );
   }
@@ -192,9 +193,10 @@ const LoggerTable = () => {
                     setLogs([]);
                     setPage(1);
                     getLogs();
-                  }}>
+                  }}
+                  text="Timestamp">
                   <InputWrapper>
-                    <span className={cx(classes.headerText)}>Timestamp</span>
+                    {/* <span className={cx(classes.headerText)}>Timestamp</span> */}
                     <Space>
                       <RangePicker
                         showTime={{ format: "HH:mm" }}
