@@ -107,7 +107,7 @@ const LoggerTable = () => {
         params: {
           project: projectName,
           traceId: values?.traceId ? values.traceId : undefined,
-          context: values?.context,
+          context: values?.context ? values?.context : undefined,
           dateFrom: values?.timestamp.start
             ? format(new Date(values?.timestamp.start), "yyyy-MM-dd'T'hh:mm")
             : undefined,
@@ -190,6 +190,7 @@ const LoggerTable = () => {
                   onSort={() => {
                     setSorting(sorting === 1 ? -1 : 1);
                     setLogs([]);
+                    setPage(1);
                     getLogs();
                   }}>
                   <InputWrapper>
