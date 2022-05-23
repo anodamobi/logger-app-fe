@@ -42,13 +42,17 @@ it back for you on request in user-friendly manner.
 
 ## Documentation
 
-<img src="https://drive.google.com/file/d/1JJ8z4tJWRoQAqfjvBB1pczFv90YuEEWX/view?usp=sharing" width="150px" alt="">
+<img src="http://drive.google.com/uc?export=view&id=1JJ8z4tJWRoQAqfjvBB1pczFv90YuEEWX" alt="">
+<br/>
 - Login page, you need enter the app with a pin code 
-<img src="https://drive.google.com/file/d/15NVtXKt_-lwkLnKDZi7olTbU-qyL8KfV/view?usp=sharing" width="150px" alt="">
+<img src="http://drive.google.com/uc?export=view&id=15NVtXKt_-lwkLnKDZi7olTbU-qyL8KfV" alt="">
+<br/>
 - Project page, you can choose the project which logs you want to see
-<img src="https://drive.google.com/file/d/16a2_xrICo2NOCvFvyPgQ00omyu70LqXh/view?usp=sharing" width="150px" alt="">
+<img src="http://drive.google.com/uc?export=view&id=16a2_xrICo2NOCvFvyPgQ00omyu70LqXh" alt="">
+<br/>
 - Environments page, you can choose the environment which logs you want to see
-<img src="https://drive.google.com/file/d/1A07GAib4dBzLguH9L2y2QXtwAzIXXEPX/view?usp=sharing" width="150px" alt="">
+<img src="http://drive.google.com/uc?export=view&id=1A07GAib4dBzLguH9L2y2QXtwAzIXXEPX" alt="">
+<br/>
 - Logs page, here you can see logs of current project and environment, using filters above
 
 Copyright 2022 ANODA, all rights reserved
