@@ -3,7 +3,7 @@ import styled from "styled-components";
 
 export const useStyles = createStyles((theme) => ({
   form: {
-    minHeight: "100vh",
+    minHeight: "100vh"
   },
   header: {
     position: "sticky",
@@ -16,30 +16,54 @@ export const useStyles = createStyles((theme) => ({
       position: "absolute",
       left: 0,
       right: 0,
-      bottom: 0,
-    },
+      bottom: 0
+    }
   },
   table: {
-    position: "relative",
+    position: "relative"
   },
 
   scrolled: {
-    boxShadow: theme.shadows.sm,
+    boxShadow: theme.shadows.sm
   },
   body: {
     color: "black",
-    overflow: "scroll",
+    overflow: "scroll"
   },
   headerText: {
     color: "#ff7145",
-    fontSize: 18,
+    fontSize: 18
   },
   rowText: {
-    fontSize: 16,
+    fontSize: 16
   },
   row: {
-    cursor: "pointer",
+    cursor: "pointer"
   },
+  messageCol: {
+    whiteSpace: "nowrap",
+    overflow: "hidden",
+    textOverflow: "ellipsis",
+    maxWidth: 300
+  },
+  th: {
+    padding: "0 !important"
+  },
+
+  control: {
+    width: "100%",
+    padding: 0,
+
+    "&:hover": {
+      backgroundColor: theme.colorScheme === "dark" ? theme.colors.dark[6] : theme.colors.gray[0]
+    }
+  },
+
+  icon: {
+    width: 21,
+    height: 21,
+    borderRadius: 21
+  }
 }));
 
 export const Header = styled.div`
