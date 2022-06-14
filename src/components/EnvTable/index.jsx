@@ -15,26 +15,26 @@ const useStyles = createStyles((theme) => ({
       left: 0,
       right: 0,
       bottom: 0,
-      borderBottom: `1px solid #ff7145`,
-    },
+      borderBottom: `1px solid #ff7145`
+    }
   },
 
   scrolled: {
-    boxShadow: theme.shadows.sm,
+    boxShadow: theme.shadows.sm
   },
   body: {
-    color: "black",
+    color: "black"
   },
   row: {
-    cursor: "pointer",
+    cursor: "pointer"
   },
   headerText: {
     color: "#ff7145",
-    fontSize: 18,
+    fontSize: 18
   },
   rowText: {
-    fontSize: 16,
-  },
+    fontSize: 16
+  }
 }));
 
 const EnvTable = () => {
@@ -49,8 +49,7 @@ const EnvTable = () => {
     <tr
       className={cx(classes.row)}
       onClick={() => navigate(`/projects/${projectName}/${row}`)}
-      key={row}
-    >
+      key={row}>
       <td>
         <span className={cx(classes.rowText)}>{row}</span>
       </td>
@@ -58,10 +57,7 @@ const EnvTable = () => {
   ));
 
   return (
-    <ScrollArea
-      sx={{ height: 300 }}
-      onScrollPositionChange={({ y }) => setScrolled(y !== 0)}
-    >
+    <ScrollArea sx={{ height: 300 }} onScrollPositionChange={({ y }) => setScrolled(y !== 0)}>
       <Table sx={{ minWidth: 700 }}>
         <thead className={cx(classes.header, { [classes.scrolled]: scrolled })}>
           <tr>
