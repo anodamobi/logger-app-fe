@@ -4,7 +4,7 @@ import { Text } from "./LogsModal.style";
 const LogsModal = ({ isOpen, onClose, data }) => {
   return (
     <>
-      <Modal opened={isOpen} onClose={onClose} title="Log">
+      <Modal size="lg" opened={isOpen} onClose={onClose} title="Log">
         <div>
           <Text>Trace id: </Text>
           <span>{data.traceId}</span>
