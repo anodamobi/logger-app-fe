@@ -7,20 +7,20 @@ const LoginForm = () => {
   const navigate = useNavigate();
   const formik = useFormik({
     initialValues: {
-      pin: "",
+      pin: ""
     },
     onSubmit: (values) => {
       api
         .get("/auth", {
           headers: {
-            "x-access-token": values.pin,
-          },
+            "x-access-token": values.pin
+          }
         })
         .then((res) => {
           localStorage.setItem("token", res.auth.jwt);
           navigate("/", { replace: true });
         });
-    },
+    }
   });
 
   return (
